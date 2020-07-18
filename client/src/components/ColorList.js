@@ -33,15 +33,15 @@ const ColorList = ({ colors, updateColors }) => {
   };
 
   const saveEdit = (e) => {
-    e.preventDefault();
     // Make a put request to save your updated color
     // think about where will you get the id from...
     // where is is saved right now?
+    e.preventDefault();
     axiosWithAuth()
-      .put(`http://localhost:5000/api/colors/${colors.id}`)
+      .put(`http://localhost:5000/api/colors/${colors.id}`, colorToEdit)
       .then((res) => {
-        updateColors(res.data);
-        push(`/colors/${colors.id}`);
+        setColorToEdit(res.data);
+        push(`/colors${colors.id}`);
         console.log(res.data);
       })
       .catch((err) => {
@@ -52,10 +52,10 @@ const ColorList = ({ colors, updateColors }) => {
   const deleteColor = (e) => {
     // make a delete request to delete this color
     axiosWithAuth()
-      .delete(`http://localhost:5000/api/colors/${colors.id}`)
+      .delete(`http://localhost:5000/api/colors/${colors.id}`, colorToEdit)
       .then((res) => {
-        updateColors(res.data);
-        push(`/colors/${colors.id}`);
+        setColorToEdit(res.data);
+        push(`/colors${colors.id}`);
         console.log(res.data);
       })
       .catch((err) => {
@@ -113,7 +113,7 @@ const ColorList = ({ colors, updateColors }) => {
             />
           </label>
           <div className="button-row">
-            <button>save</button>
+            <button onClick={saveEdit}>save</button>
             <button onClick={() => setEditing(false)}>cancel</button>
           </div>
         </form>
