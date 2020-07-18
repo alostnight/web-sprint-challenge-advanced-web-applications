@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { axiosWithAuth } from "../utils/axiosWithAuth";
+import { useParams, useHistory } from "react-router-dom";
 
 const initialColor = {
   color: "",
@@ -11,6 +12,8 @@ const ColorList = ({ colors, updateColors }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const { push } = useHistory();
+  const { id } = useParams();
 
   const editColor = (color) => {
     setEditing(true);
@@ -37,20 +40,23 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth()
       .put(`http://localhost:5000/api/colors/${colors.id}`)
       .then((res) => {
-        console.log(res);
+        updateColors(res.data);
+        push(`/colors/${colors.id}`);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const deleteColor = (color) => {
+  const deleteColor = (e) => {
     // make a delete request to delete this color
-    e.preventDefault();
     axiosWithAuth()
-      .delete(`http://localhost5000/api/colors/${colors.id}`)
+      .delete(`http://localhost:5000/api/colors/${colors.id}`)
       .then((res) => {
-        console.log(res);
+        updateColors(res.data);
+        push(`/colors/${colors.id}`);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -107,7 +113,7 @@ const ColorList = ({ colors, updateColors }) => {
             />
           </label>
           <div className="button-row">
-            <button type="submit">save</button>
+            <button>save</button>
             <button onClick={() => setEditing(false)}>cancel</button>
           </div>
         </form>
