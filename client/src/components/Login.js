@@ -16,7 +16,7 @@ const Login = () => {
       .then((res) => {
         console.log(res);
         localStorage.setItem("token", res.data.payload);
-        history.push("/");
+        history.push("/bubblepage");
       });
   };
 
